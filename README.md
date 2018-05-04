@@ -1,2 +1,3 @@
 # Easy-Todo
-A Vue + Flask based todo application.
+
+A simple application based on `Vue` and `Flask`.
