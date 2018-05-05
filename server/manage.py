@@ -12,6 +12,14 @@ if __name__ == '__main__':
         return dict(app=app, db=db, TodoList=TodoList, TodoItem=TodoItem)
 
 
+    @manager.command
+    def init():
+        db.drop_all()
+        db.create_all()
+        TodoList.init()
+        TodoItem.init()
+
+
     manager.add_command('shell', Shell(make_context=make_shell_context))
 
     manager.run()
