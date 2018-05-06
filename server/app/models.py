@@ -31,7 +31,7 @@ class TodoItem(db.Model):
     __tablename__ = 'todo_item'
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text)
-    date = db.Column(db.Date, default=datetime.utcnow)
+    date = db.Column(db.Date, default=datetime.date)
     list_id = db.Column(db.Integer, db.ForeignKey('todo_list.id'))
 
     def json(self):
@@ -42,11 +42,9 @@ class TodoItem(db.Model):
         }
 
     @staticmethod
-    def init(list_count=5, item_count=7):
-        # from random import seed
+    def init(item_count=7):
         import forgery_py
-        # seed()
-        for todo_list in TodoList.query.all(): # type: TodoList
+        for todo_list in TodoList.query.all():  # type: TodoList
             for i in range(item_count):
                 item = TodoItem(content=forgery_py.lorem_ipsum.sentence(),
                                 date=forgery_py.date.date(True),
