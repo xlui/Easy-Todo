@@ -27,12 +27,12 @@ export default {
         {
           title: '星期二',
           count: 2,
-          locked: true
+          locked: false
         },
         {
           title: '星期三',
           count: 3,
-          locked: false
+          locked: true
         }
       ]
     }
