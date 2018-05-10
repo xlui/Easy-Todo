@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const baseUrl = 'http://127.0.0.1:5000'
+const listBaseUrl = 'http://127.0.0.1:5000/todo-list'
+const itemBaseUrl = listBaseUrl + '/'
 
 axios.interceptors.request.use(config => {
   return config
@@ -17,11 +18,19 @@ axios.interceptors.response.use(data => {
 })
 
 export const getTodoList = params => {
-  return axios.get(baseUrl + '/todo-list', {
+  return axios.get(listBaseUrl, {
     params: params
   })
 }
 
 export const addTodoList = params => {
-  return axios.post(baseUrl + '/todo-list', params).then(res => res.data)
+  return axios.post(listBaseUrl, params).then(res => res.data)
+}
+
+export const getTodo = params => {
+  return axios.get(itemBaseUrl + params + '/todo-item', {})
+}
+
+export const addItem = params => {
+  return axios.post(itemBaseUrl + params + '/todo-item', params).then(res => res.data)
 }

@@ -1,15 +1,15 @@
 <template>
   <div class="list-todos">
     <a
-      @click="gotoList(item.id)"
+      @click="gotoList(list.id)"
       class="list-todo activeListClass list"
-      :class="{'active' : item.id === todoId}"
-      v-for="item in items"
-      :key="item.id">
+      :class="{'active' : list.id === todoId}"
+      v-for="list in lists"
+      :key="list.id">
 
-      <span class="icon-lock" v-if="item.locked"></span>
-      <span class="count-list" v-if="item.count > 0">{{ item.count }}</span>
-      {{ item.content }}
+      <span class="icon-lock" v-if="list.locked"></span>
+      <span class="count-list" v-if="list.count > 0">{{ list.count }}</span>
+      {{ list.content }}
     </a>
 
     <a class="link-list-new" @click="addNewTodoList">
@@ -24,14 +24,14 @@ import {getTodoList, addTodoList} from '../api/api'
 export default {
   data () {
     return {
-      items: [],
+      lists: [],
       todoId: ''
     }
   },
   created () {
     getTodoList({}).then(res => {
       const TODOs = res.data.lists
-      this.items = TODOs
+      this.lists = TODOs
       this.todoId = TODOs[0].id
     })
   },
@@ -45,9 +45,20 @@ export default {
       }).then(data => {
         getTodoList({}).then(res => {
           const ToDos = res.data.lists
+          this.lists = ToDos
           this.todoId = ToDos[ToDos.length - 1].id
-          this.items = ToDos
         })
+      })
+    }
+  },
+  watch: {
+    'todoId' (id) {
+      // 监听到用户点击 todoId 的变化再跳转路由
+      this.$router.push({
+        name: 'todo',
+        params: {
+          id: id
+        }
       })
     }
   }

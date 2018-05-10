@@ -16,6 +16,7 @@ class TodoList(db.Model):
         return {
             'id': self.id,
             'content': self.content,
+            'count': self.items.count(),
             'isDelete': self.isDelete,
             'locked': self.locked,
         }
@@ -47,10 +48,11 @@ class TodoItem(db.Model):
         }
 
     @staticmethod
-    def init(item_count=7):
+    def init(item_count=10):
+        import random
         import forgery_py
         for todo_list in TodoList.query.all():  # type: TodoList
-            for i in range(item_count):
+            for i in range(random.randint(1, item_count)):
                 item = TodoItem(content=forgery_py.lorem_ipsum.sentence(),
                                 date=forgery_py.date.date(True),
                                 list_id=todo_list.id)

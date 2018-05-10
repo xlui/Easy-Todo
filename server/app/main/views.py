@@ -28,7 +28,10 @@ def get_all_todo_items(list_id: int):
         raise InvalidRequest('todo-list id is invalid!')
     items = todo_list.items
     items = [item.json() for item in items]
-    return jsonify({'items': items}), 200
+    # return jsonify({'items': items}), 200
+    json = todo_list.json()
+    json['items'] = items
+    return jsonify(json), 200
 
 
 @main.route('/todo-list/<list_id>/todo-item', methods=['POST'])

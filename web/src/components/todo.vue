@@ -9,8 +9,8 @@
       </div>
 
       <h1 class="title-page">
-        <span class="title-wrapper">{{ todo.title }}</span>
-        <span class="count-list">{{ todo.count }}</span>
+        <span class="title-wrapper">{{ todo.content }}</span>
+        <span class="count-list">{{ todo.count || 0 }}</span>
       </h1>
 
       <div class="nav-group right">
@@ -26,7 +26,11 @@
       </div>
 
       <div class="form todo-new input-symbol">
-        <input type="text" v-model="text" placeholder="请输入" @keyup.enter="onAdd" :disabled="todo.locked">
+        <input type="text"
+               v-model="text"
+               placeholder="请输入"
+               @keyup.enter="onAdd"
+               :disabled="todo.locked">
         <span class="icon-add"></span>
       </div>
     </nav>
@@ -34,7 +38,8 @@
     <!-- 容器的下半部分-->
     <div class="content-scrollable list-items">
       <div v-for="item in items" :key="item.id">
-        <item :item="item"></item>  <!-- 传递 item 到子组件 -->
+        <!-- 传递 item 到子组件 -->
+        <item :item="item"></item>
       </div>
     </div>
   </div>
@@ -42,23 +47,33 @@
 
 <script>
 import item from './item'
+import {getTodo} from '../api/api'
 export default {
   data () {
     return {
       todo: {
-        title: '星期一',
+        content: '星期一',
         count: 12,
         locked: false
       },
-      items: [
-        {checked: false, text: '新的一天', isDelete: false},
-        {checked: false, text: '新的一天', isDelete: false},
-        {checked: false, text: '新的一天', isDelete: false}
-      ],
+      items: [],
       text: ''
     }
   },
   methods: {
+    init () {
+      const ID = this.$route.params.id
+      getTodo(ID).then(res => {
+        this.items = res.data.items
+        this.todo = {
+          id: res.data.id,
+          content: res.data.content,
+          count: res.data.count,
+          isDelete: res.data.isDelete,
+          locked: res.data.locked
+        }
+      })
+    },
     onAdd () {
       this.items.push({
         checked: false, text: this.text, isDelete: false
@@ -68,6 +83,15 @@ export default {
   },
   components: {
     item
+  },
+  created () {
+    // this.init()
+  },
+  watch: {
+    // 监听 $route.params
+    '$route.params.id' () {
+      this.init()
+    }
   }
 }
 </script>
