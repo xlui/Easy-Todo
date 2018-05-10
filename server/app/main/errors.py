@@ -1,4 +1,5 @@
-from flask import jsonify
+from flask import jsonify, make_response
+import sqlalchemy.exc
 
 from . import main
 from ..exception import InvalidRequest
@@ -15,3 +16,8 @@ def handle_invalid_request(e):
     response = jsonify(e.json())
     response.status_code = e.status_code
     return response
+
+
+@main.errorhandler(sqlalchemy.exc.IntegrityError)
+def handle_unique_constraint(e):
+    return make_response('todo-list content must be unique!', 400)

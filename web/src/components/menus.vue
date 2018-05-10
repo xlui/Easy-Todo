@@ -1,13 +1,18 @@
 <template>
   <div class="list-todos">
-    <a class="list-todo activeListClass list" v-for="item in items" :key="item.id">
+    <a
+      @click="gotoList(item.id)"
+      class="list-todo activeListClass list"
+      :class="{'active' : item.id === todoId}"
+      v-for="item in items"
+      :key="item.id">
+
       <span class="icon-lock" v-if="item.locked"></span>
-      <span class="count-list" v-if="item.count > 0">
-        {{ item.count }}
-      </span>
-      {{ item.title }}
+      <span class="count-list" v-if="item.count > 0">{{ item.count }}</span>
+      {{ item.content }}
     </a>
-    <a class="link-list-new">
+
+    <a class="link-list-new" @click="addNewTodoList">
       <span class="icon-plus"></span>
       新增
     </a>
@@ -15,26 +20,35 @@
 </template>
 
 <script>
+import {getTodoList, addTodoList} from '../api/api'
 export default {
   data () {
     return {
-      items: [
-        {
-          title: '星期一',
-          count: 1,
-          locked: true
-        },
-        {
-          title: '星期二',
-          count: 2,
-          locked: false
-        },
-        {
-          title: '星期三',
-          count: 3,
-          locked: true
-        }
-      ]
+      items: [],
+      todoId: ''
+    }
+  },
+  created () {
+    getTodoList({}).then(res => {
+      const TODOs = res.data.lists
+      this.items = TODOs
+      this.todoId = TODOs[0].id
+    })
+  },
+  methods: {
+    gotoList (id) {
+      this.todoId = id
+    },
+    addNewTodoList () {
+      addTodoList({
+        content: 'newList'
+      }).then(data => {
+        getTodoList({}).then(res => {
+          const ToDos = res.data.lists
+          this.todoId = ToDos[ToDos.length - 1].id
+          this.items = ToDos
+        })
+      })
     }
   }
 }

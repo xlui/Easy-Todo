@@ -6,14 +6,18 @@ from . import db
 class TodoList(db.Model):
     __tablename__ = 'todo_list'
     id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.String(128), unique=True)
+    content = db.Column(db.String(128))
+    isDelete = db.Column(db.Boolean, default=False)
+    locked = db.Column(db.Boolean, default=False)
     # items
     items = db.relationship('TodoItem', lazy='dynamic')
 
     def json(self):
         return {
             'id': self.id,
-            'content': self.content
+            'content': self.content,
+            'isDelete': self.isDelete,
+            'locked': self.locked,
         }
 
     @staticmethod
@@ -22,7 +26,8 @@ class TodoList(db.Model):
         import forgery_py
         seed()
         for i in range(count):
-            todo_list = TodoList(content=forgery_py.lorem_ipsum.sentence())
+            todo_list = TodoList(content=forgery_py.lorem_ipsum.sentence(),
+                                 locked=forgery_py.basic.boolean())
             db.session.add(todo_list)
         db.session.commit()
 

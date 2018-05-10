@@ -15,9 +15,7 @@ def get_all_todo_list():
 
 @main.route('/todo-list', methods=['POST'])
 def post_a_todo_list():
-    if not request.json:
-        raise InvalidRequest('Require JSON format todo-list POST!')
-    todo_list = TodoList(content=request.json.get('content'))
+    todo_list = TodoList(content='a new todo list')
     db.session.add(todo_list)
     db.session.commit()
     return make_response('Successfully created a new todo-list!', 201)
