@@ -31,13 +31,17 @@
       </div>
     </nav>
 
+    <!-- 容器的下半部分-->
     <div class="content-scrollable list-items">
-      <!-- 容器的下半部分-->
+      <div v-for="item in items" :key="item.id">
+        <item :item="item"></item>  <!-- 传递 item 到子组件 -->
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import item from './item'
 export default {
   data () {
     return {
@@ -61,6 +65,9 @@ export default {
       })
       this.text = ''
     }
+  },
+  components: {
+    item
   }
 }
 </script>
