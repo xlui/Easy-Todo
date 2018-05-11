@@ -1,5 +1,5 @@
-from flask import jsonify, make_response
 import sqlalchemy.exc
+from flask import jsonify, make_response
 
 from . import main
 from ..exception import InvalidRequest

@@ -65,7 +65,7 @@ def create_a_todo_item_of_specify_todo_list(list_id):
 
 @main.route('/todo-list/<list_id>/todo-item/<item_id>', methods=['PUT'])
 def update_a_specify_todo_item(list_id, item_id):
-    item = TodoItem.query.filter_by(id=item_id).first() # type: TodoItem
+    item = TodoItem.query.filter_by(id=item_id).first()  # type: TodoItem
     if not item:
         raise InvalidRequest('item id is invalid!')
     item.content = request.json.get('content') or item.content
