@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const listBaseUrl = 'http://127.0.0.1:5000/todo-list'
+const listBaseUrl = 'https://todo.dx.style/api/todo-list'
 const itemBaseUrl = listBaseUrl + '/'
 
 axios.interceptors.request.use(config => {
