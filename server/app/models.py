@@ -38,12 +38,14 @@ class TodoItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text)
     date = db.Column(db.Date, default=datetime.date)
+    isDone = db.Column(db.Boolean, default=False)
     list_id = db.Column(db.Integer, db.ForeignKey('todo_list.id'))
 
     def json(self):
         return {
             'id': self.id,
             'content': self.content,
+            'isDone': self.isDone,
             'date': self.date,
         }
 
@@ -54,6 +56,7 @@ class TodoItem(db.Model):
         for todo_list in TodoList.query.all():  # type: TodoList
             for i in range(random.randint(1, item_count)):
                 item = TodoItem(content=forgery_py.lorem_ipsum.sentence(),
+                                isDone=forgery_py.basic.boolean(),
                                 date=forgery_py.date.date(True),
                                 list_id=todo_list.id)
                 db.session.add(item)

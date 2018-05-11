@@ -27,10 +27,18 @@ export const addTodoList = params => {
   return axios.post(listBaseUrl, params).then(res => res.data)
 }
 
-export const getTodo = params => {
-  return axios.get(itemBaseUrl + params + '/todo-item', {})
+export const updateTodoList = (listId, params) => {
+  return axios.put(itemBaseUrl + listId, params)
 }
 
-export const addItem = params => {
-  return axios.post(itemBaseUrl + params + '/todo-item', params).then(res => res.data)
+export const getItems = listId => {
+  return axios.get(itemBaseUrl + listId + '/todo-item', {})
+}
+
+export const addItem = (listId, params) => {
+  return axios.post(itemBaseUrl + listId + '/todo-item', params).then(res => res.data)
+}
+
+export const updateItem = (listId, itemId, params) => {
+  return axios.put(itemBaseUrl + listId + '/todo-item/' + itemId, params).then(res => res.data)
 }

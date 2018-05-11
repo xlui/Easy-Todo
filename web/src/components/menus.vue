@@ -4,7 +4,7 @@
       @click="gotoList(list.id)"
       class="list-todo activeListClass list"
       :class="{'active' : list.id === todoId}"
-      v-for="list in lists"
+      v-for="list in todoList"
       :key="list.id">
 
       <span class="icon-lock" v-if="list.locked"></span>
@@ -20,20 +20,13 @@
 </template>
 
 <script>
-import {getTodoList, addTodoList} from '../api/api'
+import {addTodoList} from '../api/api'
 export default {
   data () {
     return {
       lists: [],
       todoId: ''
     }
-  },
-  created () {
-    getTodoList({}).then(res => {
-      const TODOs = res.data.lists
-      this.lists = TODOs
-      this.todoId = TODOs[0].id
-    })
   },
   methods: {
     gotoList (id) {
@@ -43,13 +36,27 @@ export default {
       addTodoList({
         content: 'newList'
       }).then(data => {
-        getTodoList({}).then(res => {
-          const ToDos = res.data.lists
-          this.lists = ToDos
-          this.todoId = ToDos[ToDos.length - 1].id
+        this.$store.dispatch('getTodo').then(() => {
+          this.$nextTick(() => {
+            setTimeout(() => {
+              this.gotoList(this.todoList[this.todoList.length - 1].id)
+            }, 100)
+          })
         })
       })
     }
+  },
+  computed: {
+    todoList () {
+      return this.$store.getters.getTodoList
+    }
+  },
+  created () {
+    this.$store.dispatch('getTodo').then(() => {
+      this.$nextTick(() => {
+        this.gotoList(this.todoList[0].id)
+      })
+    })
   },
   watch: {
     'todoId' (id) {

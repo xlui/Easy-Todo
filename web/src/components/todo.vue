@@ -1,25 +1,35 @@
 <template>
   <div class="page lists-show">
     <nav>
-      <div class="nav-group">
+      <div class="form list-edit-form" v-show="isUpdate">
+        <input type="text" v-model="todo.content" @keyup.enter="updateContent" :disabled="todo.locked">
+        <div class="nav-group right">
+          <a class="nav-item" @click="isUpdate = false">
+            <span class="icon-close"></span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 在菜单图标下添加 updateMenu 事件，可以直接调用 vuex actions.js 里面的 updateMenu 方法 -->
+      <div class="nav-group" @click="$store.dispatch('updateMenu')" v-show="!isUpdate">
         <a class="nav-item">
           <span class="icon-list-unordered">
           </span>
         </a>
       </div>
 
-      <h1 class="title-page">
+      <h1 class="title-page" v-show="!isUpdate" @click="isUpdate = true">
         <span class="title-wrapper">{{ todo.content }}</span>
         <span class="count-list">{{ todo.count || 0 }}</span>
       </h1>
 
-      <div class="nav-group right">
+      <div class="nav-group right" v-show="!isUpdate">
         <div class="options-web">
-          <a class="nav-item">
+          <a class="nav-item" @click="onLock">
             <span class="icon-lock" v-if="todo.locked"></span>
             <span class="icon-unlock" v-else></span>
           </a>
-          <a class="nav-item">
+          <a class="nav-item" @click="onDelete">
             <span class="icon-trash"></span>
           </a>
         </div>
@@ -39,7 +49,11 @@
     <div class="content-scrollable list-items">
       <div v-for="item in items" :key="item.id">
         <!-- 传递 item 到子组件 -->
-        <item :item="item"></item>
+        <item
+          :item="item"
+          :locked="todo.locked"
+          :init="init">
+        </item>
       </div>
     </div>
   </div>
@@ -47,23 +61,20 @@
 
 <script>
 import item from './item'
-import {getTodo} from '../api/api'
+import {getItems, addItem, updateTodoList} from '../api/api'
 export default {
   data () {
     return {
-      todo: {
-        content: '星期一',
-        count: 12,
-        locked: false
-      },
+      todo: {},
       items: [],
-      text: ''
+      text: '',
+      isUpdate: false
     }
   },
   methods: {
     init () {
       const ID = this.$route.params.id
-      getTodo(ID).then(res => {
+      getItems(ID).then(res => {
         this.items = res.data.items
         this.todo = {
           id: res.data.id,
@@ -75,10 +86,31 @@ export default {
       })
     },
     onAdd () {
-      this.items.push({
-        checked: false, text: this.text, isDelete: false
+      const ID = this.$route.params.id
+      addItem(ID, {
+        content: this.text
+      }).then(res => {
+        this.text = ''
+        this.init()
       })
-      this.text = ''
+    },
+    onLock () {
+      this.todo.locked = !this.todo.locked
+      this.updateTodo()
+    },
+    onDelete () {
+      this.todo.isDelete = true
+      this.updateTodo()
+    },
+    updateContent () {
+      this.updateTodo()
+      this.isUpdate = false
+    },
+    updateTodo () {
+      let _this = this
+      updateTodoList(this.$route.params.id, this.todo).then(data => {
+        _this.$store.dispatch('getTodo')
+      })
     }
   },
   components: {
