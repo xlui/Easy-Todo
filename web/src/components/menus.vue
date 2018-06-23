@@ -16,11 +16,16 @@
       <span class="icon-plus"></span>
       新增
     </a>
+
+    <a class="link-list-new" @click="init">
+      <span class="icon-sync"></span>
+      重新初始化
+    </a>
   </div>
 </template>
 
 <script>
-import {addTodoList} from '../api/api'
+import {addTodoList, init} from '../api/api'
 export default {
   data () {
     return {
@@ -44,6 +49,10 @@ export default {
           })
         })
       })
+    },
+    init () {
+      init({})
+      location.reload()
     }
   },
   computed: {

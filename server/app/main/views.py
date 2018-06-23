@@ -72,3 +72,11 @@ def update_a_specify_todo_item(list_id, item_id):
     item.isDone = request.json.get('isDone')
     print(request.json.get('isDone'))
     return make_response('Successfully updated a item', 200)
+
+
+@main.route('/init')
+def init():
+    db.drop_all()
+    db.create_all()
+    TodoList.init()
+    TodoItem.init()

@@ -1,6 +1,8 @@
 import axios from 'axios'
 
-const listBaseUrl = 'https://todo.dx.style/api/todo-list'
+// const base = 'http://127.0.0.1:5000'
+const base = 'https://todo.dx.style/api'
+const listBaseUrl = base + '/todo-list'
 const itemBaseUrl = listBaseUrl + '/'
 
 axios.interceptors.request.use(config => {
@@ -41,4 +43,8 @@ export const addItem = (listId, params) => {
 
 export const updateItem = (listId, itemId, params) => {
   return axios.put(itemBaseUrl + listId + '/todo-item/' + itemId, params).then(res => res.data)
+}
+
+export const init = params => {
+  return axios.get(base + '/init', params).then(res => res.data)
 }
