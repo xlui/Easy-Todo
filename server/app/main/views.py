@@ -80,3 +80,5 @@ def init():
     db.create_all()
     TodoList.init()
     TodoItem.init()
+    return 'Init success!'
+
