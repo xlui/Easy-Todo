@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 // const base = 'http://127.0.0.1:5000'
-const base = 'https://todo.dx.style/api'
+const base = 'https://todo.xlui.app/api'
 const listBaseUrl = base + '/todo-list'
 const itemBaseUrl = listBaseUrl + '/'
 
