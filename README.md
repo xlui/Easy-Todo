@@ -4,8 +4,6 @@
 
 A simple todo application based on [Vue](https://github.com/vuejs/vue) and [Flask](https://github.com/pallets/flask).
 
-preview: https://todo.dx.style
-
 ## About this project
 
 [Vue.js](https://github.com/vuejs/vue) is a excellent open source project, and I have learnt Vue.js in the winter of 2017. But after learning about how to use Vue(the grammar of Vue.js), I'm still not sure where to use it. Recently I hit on an open source project [vue-todos](https://github.com/liangxiaojuan/vue-todos) which teaches how to use Vue.js to write a simple Todo application.
