@@ -1,6 +1,6 @@
 click==6.7
 Flask==1.0.2
-Flask-Cors==3.0.6
+Flask-Cors==3.0.9
 Flask-Script==2.0.6
 Flask-SQLAlchemy==2.3.2
 ForgeryPy3==0.3.1
